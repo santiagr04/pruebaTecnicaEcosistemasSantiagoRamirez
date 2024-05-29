@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Productos</title>
+    <script>
+        function consultar(endpoint) {
+            const numDocumento = document.getElementById('num_documento').value;
+            if (numDocumento) {
+                const url = `/${endpoint}?num_documento=${numDocumento}`;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            const resultadoVentana = window.open('', '_blank');
+                            resultadoVentana.document.write('<html><head><title>Resultados</title></head><body>');
+                            resultadoVentana.document.write('<h1>Resultados</h1>');
+                            resultadoVentana.document.write('<pre>' + JSON.stringify(data, null, 2) + '</pre>');
+                            resultadoVentana.document.write('</body></html>');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            } else {
+                alert('Por favor, ingrese un número de documento.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Consulta de Productos</h1>
+    <label for="num_documento">Número de Documento:</label>
+    <input type="text" id="num_documento" name="num_documento">
+    <button onclick="consultar('consultaProductos')">Consultar Productos</button>
+    <button onclick="consultar('valor_total')">Consultar Valor Total</button>
+</body>
+</html>
